@@ -37,6 +37,7 @@
 			// Bubble up until we find an element with a relevant class or reach the document
 			while (
 				target != null &&
+				target.nodeType == Node.ELEMENT_NODE && // Only continue while target is an HTMLElement
 				!target.classList.contains(quantityIncrementButtonClass) &&
 				!target.classList.contains(quantityDecrementButtonClass)
 			) {

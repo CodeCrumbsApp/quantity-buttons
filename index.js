@@ -45,7 +45,7 @@
 			}
 
 			// If the target or one of its parents has a relevant class, adjust the input value
-			if (target != null) {
+			if (target != null && target.nodeType == Node.ELEMENT_NODE) {
 				let input = target
 					.closest(`.${quantityGroupClass}`)
 					.querySelector(`.${quantityNumberFieldClass}`)

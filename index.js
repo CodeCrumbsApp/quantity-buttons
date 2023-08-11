@@ -10,49 +10,56 @@
 	}) {
 		// Function to disable or enable the decrement button
 		function manageDecButtonState(input, decButton) {
-			if (disableDecrementAtOne) {
-				if (parseInt(input.value, 10) <= 1) {
-					decButton.setAttribute('disabled', '')
-					decButton.classList.add('disabled')
-				} else {
-					decButton.removeAttribute('disabled')
-					decButton.classList.remove('disabled')
+			const isDisabled = disableDecrementAtOne && parseInt(input.value, 10) <= 1
+			decButton.toggleAttribute('disabled', isDisabled)
+			decButton.classList.toggle('disabled', isDisabled)
+		}
+
+		// Function to check input values and set disabled state of decrement buttons
+		function checkInputValues() {
+			const quantityGroups = document.querySelectorAll(`.${quantityGroupClass}`)
+			quantityGroups.forEach((group) => {
+				const input = group.querySelector(`.${quantityNumberFieldClass}`)
+				const decButton = group.querySelector(
+					`.${quantityDecrementButtonClass}`,
+				)
+				if (input && decButton) {
+					manageDecButtonState(input, decButton)
 				}
-			}
+			})
 		}
 
 		// Check input values and set disabled state of decrement buttons on page load
-		window.addEventListener('DOMContentLoaded', (event) => {
-			let quantityGroups = document.querySelectorAll(`.${quantityGroupClass}`)
-			quantityGroups.forEach((group) => {
-				let input = group.querySelector(`.${quantityNumberFieldClass}`)
-				let decButton = group.querySelector(`.${quantityDecrementButtonClass}`)
-				manageDecButtonState(input, decButton)
-			})
-		})
+		if (document.readyState !== 'loading') {
+			checkInputValues()
+		} else {
+			document.addEventListener('DOMContentLoaded', checkInputValues)
+		}
 
 		document.addEventListener('click', function (e) {
 			let target = e.target
 
 			// Bubble up until we find an element with a relevant class or reach the document
 			while (
-				target != null &&
-				target.nodeType == Node.ELEMENT_NODE && // Only continue while target is an HTMLElement
-				!target.classList.contains(quantityIncrementButtonClass) &&
-				!target.classList.contains(quantityDecrementButtonClass)
+				target &&
+				target.nodeType == Node.ELEMENT_NODE &&
+				(target.classList
+					? !target.classList.contains(quantityIncrementButtonClass) &&
+					  !target.classList.contains(quantityDecrementButtonClass)
+					: true)
 			) {
 				target = target.parentNode
 			}
 
 			// If the target or one of its parents has a relevant class, adjust the input value
-			if (target != null && target.nodeType == Node.ELEMENT_NODE) {
-				let input = target
+			if (target && target instanceof Element) {
+				const input = target
 					.closest(`.${quantityGroupClass}`)
 					.querySelector(`.${quantityNumberFieldClass}`)
-				let val = parseInt(input.value, 10)
+				const val = parseInt(input.value, 10)
 
 				// Find the decrement button to manage its 'disabled' state
-				let decButton = target
+				const decButton = target
 					.closest(`.${quantityGroupClass}`)
 					.querySelector(`.${quantityDecrementButtonClass}`)
 				if (target.classList.contains(quantityIncrementButtonClass)) {

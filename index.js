@@ -75,35 +75,7 @@
 			}
 		})
 
-		// ==================== CART MODAL ====================
-		// Function to disable or enable the decrement button
-		function manageCartDecButtonState(input, decButton) {
-			const isDisabled = parseInt(input.value, 10) <= 1
-			decButton.toggleAttribute('disabled', isDisabled)
-			decButton.classList.toggle('disabled', isDisabled)
-		}
-
-		// Function to check input values and set disabled state of decrement buttons
-		function checkCartInputValues() {
-			const quantityGroups = document.querySelectorAll(`.${quantityGroupClass}`)
-			quantityGroups.forEach((group) => {
-				const input = group.querySelector('.w-commerce-commercecartquantity')
-				const decButton = group.querySelector(
-					`.${quantityDecrementButtonClass}`,
-				)
-				if (input && decButton) {
-					manageCartDecButtonState(input, decButton)
-				}
-			})
-		}
-
-		// Check input values and set disabled state of decrement buttons on page load
-		if (document.readyState !== 'loading') {
-			checkCartInputValues()
-		} else {
-			document.addEventListener('DOMContentLoaded', checkCartInputValues)
-		}
-
+		// ====================== Code for Mutation Observer ======================
 		// Create a mutation observer to watch for changes in the input elements
 		const observer = new MutationObserver((mutationsList, observer) => {
 			for (let mutation of mutationsList) {
@@ -111,7 +83,7 @@
 					mutation.type === 'attributes' &&
 					mutation.attributeName === 'value'
 				) {
-					checkCartInputValues()
+					checkInputValues()
 				}
 			}
 		})

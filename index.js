@@ -75,7 +75,7 @@
 			}
 		})
 
-		// ====================== Code for Mutation Observer ======================
+		// ============= OBSERVER FOR ALL QUANTITY INPUTS INCLUDING CART MODAL =================
 		// Create a mutation observer to watch for changes in the input elements
 		const observer = new MutationObserver((mutationsList, observer) => {
 			for (let mutation of mutationsList) {
